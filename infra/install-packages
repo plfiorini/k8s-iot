@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+
+import argparse
+import yaml
+import subprocess
+
+def run_command(command):
+    try:
+        subprocess.run(command, check=True, shell=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred: {e}")
+
+def install_helm():
+    if subprocess.run("command -v helm", shell=True).returncode != 0:
+        print("Helm could not be found, installing...")
+        run_command("curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash")
+
+def add_helm_repos(repositories):
+    for repo in repositories:
+        name = repo['name']
+        url = repo['url']
+        run_command(f"helm repo add {name} {url}")
+    run_command("helm repo update")
+
+def install_packages(packages):
+    for package in packages:
+        name = package['name']
+        chart = package['chart']
+        namespace = package['namespace']
+        values = package.get('values', None)
+        if values:
+            run_command(f"helm upgrade --install {name} {chart} --namespace {namespace} -f {values}")
+        else:
+            run_command(f"helm upgrade --install {name} {chart} --namespace {namespace}")
+
+def main():
+    parser = argparse.ArgumentParser(description="Install Helm packages")
+    parser.add_argument("--packages", nargs='*', help="List of packages to install (default: all)", default=[])
+    parser.add_argument("--list", action="store_true", help="List available packages")
+
+    args = parser.parse_args()
+
+    # Open the configuration file
+    with open('packages.yaml', 'r') as file:
+        config = yaml.safe_load(file)
+    repositories = config['repositories']
+    packages = config['packages']
+
+    selected_packages = args.packages
+
+    if args.list:
+        print("Available packages:")
+        for package in packages:
+            print(f"  {package['name']}")
+        return
+
+    if selected_packages:
+        packages = [pkg for pkg in packages if pkg['name'] in selected_packages]
+
+    install_helm()
+
+    add_helm_repos(repositories)
+    install_packages(packages)
+
+if __name__ == "__main__":
+    main()

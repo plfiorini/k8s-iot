@@ -1,0 +1,4 @@
+{
+    "mqttBrokerUrl": "mqtt://production-broker:1883",
+    "logFormat": "ecs"
+}

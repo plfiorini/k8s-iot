@@ -1,0 +1,4 @@
+{
+    "mqttBrokerUrl": "mqtt://localhost",
+    "logFormat": "console"
+}

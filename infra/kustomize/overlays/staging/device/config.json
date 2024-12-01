@@ -1,0 +1,5 @@
+{
+    "NODE_ENV": "staging",
+    "mqttBrokerUrl": "mqtt://prod.broker.example.com",
+    "logFormat": "ecs"
+}

@@ -1,0 +1,8 @@
+resources:
+    - ../../../base/device
+
+configMapGenerator:
+    - name: device-config
+      namespace: iot
+      files:
+          - config.json=config.json

@@ -2,8 +2,12 @@
 
 set -e
 
-cluster_name="${1:-iot-cluster}"
-namespace="iot"
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 [cluster_name]"
+    exit 1
+fi
+
+cluster_name="$1"
 
 # Create a Kubernetes cluster using kind
 if ! kind get clusters | grep -q $cluster_name; then
@@ -15,6 +19,9 @@ if ! command -v helm &> /dev/null; then
     echo "Helm could not be found, installing..."
     curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 fi
+
+# Set context to the newly created cluster
+kubectl config use-context kind-$cluster_name
 
 # Create namespaces
 kubectl apply -f namespaces.yaml

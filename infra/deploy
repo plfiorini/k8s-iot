@@ -4,11 +4,7 @@ import argparse
 import os
 import subprocess
 
-context_map = {
-    "dev": "dev-cluster",
-    "staging": "staging-cluster",
-    "production": "kind-iot-cluster",
-}
+from infra import switch_context
 
 services = ["device"]
 
@@ -23,15 +19,6 @@ def deploy_service(environment, service_name):
 
     command = f"kubectl apply -k {source_path}"
     subprocess.run(command, shell=True, cwd=base_path, check=True)
-
-
-def switch_context(environment):
-    if environment in context_map:
-        context = context_map[environment]
-        switch_context_command = f"kubectl config use-context {context}"
-        subprocess.run(switch_context_command, shell=True, check=True)
-    else:
-        raise ValueError(f"Unknown environment: {environment}")
 
 
 if __name__ == "__main__":

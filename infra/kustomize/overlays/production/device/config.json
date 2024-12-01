@@ -1,4 +1,4 @@
 {
-    "mqttBrokerUrl": "mqtt://mosquitto.iot.svc.local",
+    "mqttBrokerUrl": "mqtt://mosquitto.iot.svc.cluster.local",
     "logFormat": "ecs"
 }

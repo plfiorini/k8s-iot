@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: device
+    namespace: iot
+    labels:
+        app: device
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: device
+    template:
+        metadata:
+            name: device-pod
+            labels:
+                app: device
+        spec:
+            containers:
+                - name: device-container
+                  image: plfiorini/iot-device:latest
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 3000
+                  env:
+                      - name: NODE_ENV
+                        valueFrom:
+                            configMapKeyRef:
+                                name: device-config
+                                key: NODE_ENV
+                  volumeMounts:
+                      - name: config-volume
+                        mountPath: /app/config
+                        readOnly: true
+            volumes:
+                - name: config-volume
+                  configMap:
+                      name: device-config

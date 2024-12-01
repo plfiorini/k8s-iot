@@ -16,5 +16,5 @@ packages:
     namespace: monitoring
   - name: mosquitto
     chart: k8s-at-home/mosquitto
-    namespace: default
+    namespace: iot
     values: packages/mosquitto/values.yaml

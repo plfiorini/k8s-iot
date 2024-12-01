@@ -2,7 +2,7 @@
 FROM oven/bun AS builder
 
 # Set the working directory
-WORKDIR /source
+WORKDIR /app
 
 # Copy all necessary files
 COPY package.json bun.lockb tsconfig.json ./
@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y libstdc++6 libc6
 WORKDIR /app
 
 # Copy the static executable from the build stage
-COPY --from=builder /source/binary ./binary
+COPY --from=builder /app/binary ./binary
 
 # Expose the application's port
 EXPOSE 3000

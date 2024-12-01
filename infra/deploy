@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import subprocess
+
+context_map = {
+    "dev": "dev-cluster",
+    "staging": "staging-cluster",
+    "production": "kind-iot-cluster",
+}
+
+services = ["device"]
+
+
+def deploy_service(environment, service_name):
+    if service_name not in services:
+        raise ValueError(f"Unknown service_name: {service_name}")
+
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    base_path = os.path.join(script_directory, "kustomize")
+    source_path = os.path.join(base_path, f"overlays/{environment}/{service_name}")
+
+    command = f"kubectl apply -k {source_path}"
+    subprocess.run(command, shell=True, cwd=base_path, check=True)
+
+
+def switch_context(environment):
+    if environment in context_map:
+        context = context_map[environment]
+        switch_context_command = f"kubectl config use-context {context}"
+        subprocess.run(switch_context_command, shell=True, check=True)
+    else:
+        raise ValueError(f"Unknown environment: {environment}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Deploy a service to a specified environment"
+    )
+    parser.add_argument(
+        "-e", "--environment", help="The environment to deploy to", required=True
+    )
+    parser.add_argument("-s", "--service", help="The service to deploy", required=True)
+
+    args = parser.parse_args()
+
+    switch_context(args.environment)
+    deploy_service(args.environment, args.service)

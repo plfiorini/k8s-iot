@@ -22,12 +22,6 @@ spec:
                   imagePullPolicy: Always
                   ports:
                       - containerPort: 3000
-                  env:
-                      - name: NODE_ENV
-                        valueFrom:
-                            configMapKeyRef:
-                                name: device-config
-                                key: NODE_ENV
                   volumeMounts:
                       - name: config-volume
                         mountPath: /app/config

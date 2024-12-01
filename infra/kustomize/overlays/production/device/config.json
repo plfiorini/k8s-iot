@@ -1,5 +1,4 @@
 {
-    "NODE_ENV": "production",
     "mqttBrokerUrl": "mqtt://mosquitto.iot.svc.local",
     "logFormat": "ecs"
 }

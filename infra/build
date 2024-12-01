@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+
+import os
+import subprocess
+import argparse
+
+
+def build_docker_images(service_name):
+    # Define the path to the Dockerfile and the image name
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    source_path = os.path.join(script_directory, "..", service_name)
+    image_name = f"plfiorini/iot-{service_name}"
+
+    try:
+        # Build the Docker image
+        subprocess.run(
+            ["docker", "build", "-t", image_name, "-f", "Dockerfile", "."],
+            check=True,
+            cwd=source_path,
+        )
+        print(f"Successfully built Docker image: {image_name}")
+
+        # Push the Docker image to Docker Hub
+        subprocess.run(["docker", "push", image_name], check=True)
+        print(f"Successfully pushed Docker image: {image_name}")
+    except subprocess.CalledProcessError as e:
+        print(f"Error building Docker image: {e}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Build Docker images for the specified service."
+    )
+    parser.add_argument(
+        "--service",
+        required=True,
+        choices=["device"],
+        help="The name of the service to build the Docker image for.",
+    )
+    args = parser.parse_args()
+
+    build_docker_images(args.service)

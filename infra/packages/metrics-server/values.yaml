@@ -1,4 +1,3 @@
-metrics-server:
-  args:
+args:
+    - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
     - --kubelet-insecure-tls
-    - --kubelet-preferred-address-types=Hostname,InternalIP,ExternalIP

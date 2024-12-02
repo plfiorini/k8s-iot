@@ -38,11 +38,11 @@ def install_packages(packages):
         values = package.get("values", None)
         if values:
             run_command(
-                f"helm upgrade --install {name} {chart} --namespace {namespace} -f {values}"
+                f"helm upgrade --install {name} {chart} --namespace {namespace} --create-namespace -f {values}"
             )
         else:
             run_command(
-                f"helm upgrade --install {name} {chart} --namespace {namespace}"
+                f"helm upgrade --install {name} {chart} --namespace {namespace} --create-namespace"
             )
 
 

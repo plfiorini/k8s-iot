@@ -1,8 +1,8 @@
 mosquitto:
-  persistence:
-    enabled: true
-    size: 1Gi
-    storageClass: ""
-  service:
-    type: ClusterIP
-    port: 1883
+    persistence:
+        enabled: true
+        size: 1Gi
+        storageClass: ""
+    service:
+        type: ClusterIP
+        port: 1883

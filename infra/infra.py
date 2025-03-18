@@ -3,6 +3,7 @@ import subprocess
 context_map = {
     "staging": "kind-iot-staging",
     "production": "kind-iot-production",
+    "argocd": "kind-iot-argocd",
 }
 
 

@@ -10,4 +10,5 @@ Create a cluster for each environment:
 cd infra
 ./init-cluster.sh iot-staging
 ./init-cluster.sh iot-production
+./init-cluster.sh iot-argocd
 ```
